@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0061)http://www.css88.com/demo/jQuery/quickSearch/quickSearch.html -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>jQuery实现的快速查找</title>
+
+<script type="text/javascript" src="jQuery实现的快速查找_files/jquery-1.3.min.js"></script> 
+<script type="text/javascript" src="jQuery实现的快速查找_files/goTop.js"></script>
+<script type="text/javascript" src="jQuery实现的快速查找_files/dataFactory.js"></script>
+<script type="text/javascript" src="jQuery实现的快速查找_files/timeWriter.js"></script> 
+
+<script type="text/javascript">
+
+$(function(){
+
+
+	var string="123456789";
+	var str=string.substring(0,4);
+alert(str);
+	
+
+	
+	//键盘按键弹起时执行
+	$('#index').keyup(function(){
+		var index = $.trim($('#index').val().toString());//去掉两头空格
+		if(index == ''){
+			$('li').removeClass('on');return false;
+		}
+		var parent = $('ul');
+		$('li').removeClass('on');
+		//选择包含文本框值的所有加上focus类样式，并把它（们）移到ul的最前面
+		$("li:contains('" + index + "')").prependTo(parent).addClass('on');
+	});
+});
+
+	$(document).ready(function(){
+		var data = {
+		pageData : {
+					totalNum:11,
+		            totalPage:1
+					} ,
+		listData : [
+						{name : 1 , age:1} ,
+						{name : 2 , age:2} ,
+						{name : 3 , age:3} ,
+						{name : 4 , age:4} ,
+						{name : 5 , age:5} ,
+						{name : 6 , age:6} ,
+						{name : 7 , age:7} ,
+						{name : 8 , age:8} ,
+						{name : 9 , age:9} ,
+						{name : 10 , age:10} ,
+						{name : 11 , age:11} ,
+						{name : 12 , age:12} ,
+						{name : 13 , age:13} 
+					]
+	}
+	
+	var df={
+		listData:data.listData,
+		size:40,
+		fun:handelData
+	}
+	dataFactory(df) ;
+	function handelData(Dataing){
+		data.listData = Dataing;
+		console.info(data);
+		
+		var tw={
+			listData:data.listData,
+			per:10,
+			time:2,
+			fun:writeInfo
+		}	
+		timeWrite(tw);
+		console.info(tw);
+	}
+	
+		
+	function writeInfo(data){
+		//console.info("来自延时的数据"+indexK2+"："+JSON.stringify(data));	
+	}
+	
+		
+		var jsonstr = '{"PHOTO":"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\u003d","guid":"20161101172023_52eW2a42_1767097","RESULT":"1","MESSAGE":"查询一致"}';
+		data = JSON.parse(jsonstr);
+		console.info(data);
+		$("#picture").attr("src","data:image/png;base64," + data.PHOTO);
+			
+		
+});
+	
+	
+</script>
+
+<STYLE type="text/css">
+.on{ font-size:16px;font-weight:900; color:#7BCA3D !important;}
+
+body { 
+SCROLLBAR-FACE-COLOR: white ; /*滚动条*/
+SCROLLBAR-HIGHLIGHT-COLOR: ; 
+SCROLLBAR-SHADOW-COLOR: red; /*边框*/
+SCROLLBAR-3DLIGHT-COLOR: ; 
+SCROLLBAR-ARROW-COLOR: red; /*箭头本身*/
+SCROLLBAR-TRACK-COLOR: ; /*箭头两端*/
+SCROLLBAR-DARKSHADOW-COLOR: ;
+}
+
+/*控制回到顶部的图片变换**/
+.back-top-btn {
+position: absolute;
+bottom: 2px;
+right: 2px;
+width: 82px;
+height: 82px;
+cursor: pointer;
+background: url(images/back_top3.png) no-repeat 0 0;
+}
+.back-top-btn:hover {
+background-position: right 0;
+}
+
+</STYLE>
+</head>
+
+<body>
+	<script type="text/javascript" src="canvas-nest.js-master/canvas-nest.min.js" count="200" zindex="-2" opacity="0.5" color="250,100,100" ></script> 
+		 
+	<object id="div_corner_ad_flash" data="images/UFO_gift.swf" width="400" height="425" style="  display: block;" type="application/x-shockwave-flash"><param name="allowScriptAccess" value="always"><param name="allownetworking" value="all"><param name="wmode" value="transparent"><param name="menu" value="false"></object>
+
+输入你所要查找的文字，比如“浙江”：<input type="text" name="index" id="index">
+<ul><li class="on">前端开发的技能要（X）HTML，CSS，javascript</li><li class="on">前端开发的主要工作职责是开发高性能的客户端页面</li><li class="on">我的职业是前端开发工程师，其实我现在做美工！</li><li class="">公司是浙江搜道网络技术有限公司，公司网址是<a href="http://www.sodao.com/">http://www.sodao.com</a></li><li class="">浙江舟山人，在杭州工作</li><li class="">我的个人博客网址是<a href="http://www.css88.com/">http://www.css88.com/</a></li>
+	<li class="">我的名字叫愚人码头</li>
+	<object id="div_corner_ad_flash" data="images/mouse.swf" width="200" height="225" style="  display: block;" type="application/x-shockwave-flash"><param name="allowScriptAccess" value="always"><param name="allownetworking" value="all"><param name="wmode" value="transparent"><param name="menu" value="false"></object>
+		
+		
+	
+	
+</ul>
+												
+
+<!-- <div  class="back-top-btn"></div> -->
+
+
+
+
+
+
+
+</body></html>

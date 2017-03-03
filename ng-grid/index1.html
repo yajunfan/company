@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myMod">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/ng-grid.css">
+    <style>
+        .gridStyle{
+            width: 1200px;
+            margin: 20px auto;
+            height:800px;
+        }
+    </style>
+</head>
+<body>
+
+<div ng-controller="myCtrl">
+    <div class="gridStyle" ng-grid="gridOptions"></div>
+    <input type="button" value="增加" ng-click="add()">
+    <input type="button" value="删除" ng-click="deleted()">
+</div>
+<!--关键点是下面 $scope.gridOptions 》》columnDefs》》cellTemplate》》过滤器这个点，要实现根据传入数据的不同类型得到不同的模板-->
+<script src="js/jquery.min.js"></script>
+<script src="js/angular.js"></script>
+<script src="js/ng-grid.js"></script>
+<script type="text/javascript" charset="utf-8">
+
+    var myMod = angular.module('myMod', ['ngGrid']);
+    myMod.controller('myCtrl',["$scope","$http",function ($scope,$http) {
+        $http.get('./data/nggrid.json').success(function (data) {
+          $scope.user=angular.fromJson(data);
+        });
+        $scope.gridOptions={
+            data:'user',
+            enableRowSelection:false,
+            multiSelect:false,
+            enableCellSelection:true,
+            enableCellEdit:true,
+            enablePinning:false,
+            showSelectionCheckbox:true,
+            columnDefs:[
+                {
+                    field:'id',//数据中的属性名
+                    displayName:'序号' // 表头显示的内容
+                },
+                {
+                    field:'type',
+                    displayName:'类型'
+                },
+                {
+                    field:'time',
+                    displayName:'时间'
+                },
+                {
+                    field:'name',
+                    displayName:'姓名'
+                },
+                {
+                    field:'autoCheck',
+                    displayName:'自动审核'
+                },
+                {
+                    field:'rule',
+                    displayName:'规则'
+                },
+                {
+                    field: 'dh_content',
+                    displayName: '样式',
+                     cellTemplate:'<div ng-bind-html="row|typeFormatter"></div>'// 使用单元格模板，使用过滤器进行过滤
+                }
+            ]
+        }
+        $scope.add=function () {
+            $scope.obj={"id":parseFloat(($scope.user[$scope.user.length-1]).id)+1, "type":"房贷", "time":"2016-11-10 11:49:28", "name":"哈哈", "autoCheck": "未审核", "rule":"0", "company":"滴滴", "dh_type":"0", "dh_content":"赵武", "report":"查看", "play":"删除"
+            }
+            $scope.user.push($scope.obj)
+        }
+        $scope.deleted=function () {
+            $scope.user.length--;
+        }
+    }])
+    myMod.filter('typeFormatter',function ($sce) { //自定义过滤器，过滤不同的类型
+        return function (data) {
+            //data就是row，当前的每一行
+            //console.log(data) //得到当前的行
+            //console.log(data.rowIndex); //得到当前行的索引
+            console.log(data.getProperty('dh_type'));//getProperty通过这个得到当前的的行里面的某个属性的值
+            var str="";
+            var dh_type=data.getProperty('dh_type');
+            if(dh_type==0){
+                str='<input type="text"/>';
+            }else if(dh_type==1){
+                var radios=data.getProperty('dh_content').split('_');
+                for(var i=0;i<radios.length;i++){
+                    str+='<input type="radio" name="content"/>'+radios[i]
+                }
+            }else if(dh_type==2){
+                var checkboxs = data.getProperty('dh_content').split('_');
+                for(var i=0;i<checkboxs.length;i++){
+                    str+='<input type="checkbox"/>'+checkboxs[i]
+                }
+            }
+            return $sce.trustAsHtml(str) ; //$sce.trustAsHtml实现自动转移成html格式
+        }
+    });
+</script>
+
+</body>
+</html>

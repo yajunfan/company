@@ -1,0 +1,22 @@
+@charset "utf-8";
+/* 代码整理：懒人之家 lanrenzhijia.com */
+.node {
+/*  stroke: #fff;
+  stroke-width: 1.5px;*/
+}
+
+.link {
+/*  fill: none;
+  stroke: #bbb;*/
+  fill: none;
+/*  stroke: #666;*/
+  stroke-width: 0.5px;
+}
+
+text {
+  pointer-events: none;
+/*  font: 12px normal;*/
+  font:  12px normal "宋体",Arial,Times;
+  fill:  white;
+}
+
